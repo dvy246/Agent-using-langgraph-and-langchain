@@ -1,6 +1,4 @@
-# Fixed README with Enhanced Flow Description
 
-```markdown
 # 🛡️ Heimdall – Multi-Agent Financial Intelligence
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -93,37 +91,6 @@ Synthesizes findings from all domain supervisors into a cohesive draft report. I
 
 ### 6. Validation Supervisor
 Performs quality assurance through automated evaluation. It uses a specialized evaluation chain that:
-
-```python
-def evaluate_report(report: str):
-    # Professional editor prompt to assess report quality
-    eval_chain = prompt | model | StrOutputParser
-    # Revision chain for failed reports
-    revise_chain = revise_prompt | model | StrOutputParser
-    # Routing logic to determine pass/fail
-    router = RunnableLambda(lambda x: route(x))
-    
-    conditional = RunnableBranch(
-        (lambda x: router.invoke(eval_chain.invoke(report)) == 'revise', 
-         revise_chain, 
-         RunnablePassthrough())
-    )
-    return conditional.invoke({'report': report})
-
-def route(output: str):
-    # Decision logic for report quality
-    small = output.lower().strip()
-    if any(i in small for i in ['fail', 'needs improvement', 'needs revision']):
-        return "revise"
-    else:
-        return 'pass'
-```
-
-The validation assesses:
-- **Clarity**: Language clarity and understandability
-- **Objectivity**: Neutral and unbiased tone
-- **Completeness**: Thoroughness of analysis and coverage of key areas
-- **Logical Consistency**: Whether recommendations follow logically from evidence
 
 ### 7. Human-in-the-Loop (Optional)
 Provides expert review where:
